@@ -252,6 +252,36 @@
 (function () {
   'use strict';
 
+  // Must match tenant_auth_api_service.dart's _baseUrl/_anonKey exactly —
+  // this flips tenant_owner.email_confirmed for whichever project the app
+  // is actually signing owners up against.
+  var CONFIRM_BASE_URL = 'https://zsifthqgcuyjoybekarg.supabase.co';
+  var CONFIRM_ANON_KEY = 'sb_publishable_s8xB5WGzmuemeZvrv_hPvg_RhmiCqna';
+
+  // Tells the backend a REAL confirmation link was just clicked (this page
+  // is only ever reached that way) — flips tenant_owner.email_confirmed,
+  // the flag owner-password-reset-gate actually checks. Best-effort and
+  // silent: this page's own success/failure UI never depends on it, since
+  // the account is already usable regardless (tenant-claim-owner minted a
+  // working session at sign-up time, independent of this).
+  function confirmOwnerEmail(accessToken) {
+    try {
+      fetch(CONFIRM_BASE_URL + '/functions/v1/owner-confirm-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': CONFIRM_ANON_KEY
+        },
+        body: JSON.stringify({ access_token: accessToken })
+      }).catch(function () {
+        // Swallowed on purpose — see comment above. Nothing in the UI
+        // changes either way.
+      });
+    } catch (e) {
+      // Also swallowed — e.g. `fetch` unavailable in some ancient browser.
+    }
+  }
+
   function showState(id) {
     ['state-loading', 'state-success', 'state-error', 'state-neutral'].forEach(function (sectionId) {
       var el = document.getElementById(sectionId);
@@ -300,7 +330,15 @@
       return;
     }
 
-    if (type === 'signup' || (hasAccessToken && !type)) {
+    if (type === 'signup') {
+      // A genuine confirmation-link click — the ONLY case that should
+      // flip tenant_owner.email_confirmed.
+      confirmOwnerEmail(params.get('access_token'));
+      showState('state-success');
+      return;
+    }
+
+    if (hasAccessToken && !type) {
       showState('state-success');
       return;
     }
