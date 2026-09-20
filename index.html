@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>تأكيد البريد الإلكتروني — الدليل</title>
+<meta name="description" content="صفحة تأكيد البريد الإلكتروني لنظام الدليل لإدارة الأنشطة التجارية">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --color-primary:#1A1A2E;
+    --color-secondary:#16213E;
+    --color-accent:#E94560;
+    --color-success:#0F9B58;
+    --color-danger:#E74C3C;
+    --color-surface:#FFFFFF;
+    --color-surface-alt:#F8F9FA;
+    --text-primary:#2D2D2D;
+    --text-secondary:#6B7280;
+    --text-hint:#9CA3AF;
+    --border:#E5E7EB;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+  }
+
+  body{
+    font-family:'Cairo','Tahoma',sans-serif;
+    background:
+      radial-gradient(circle at 15% -10%, rgba(233,69,96,0.18), transparent 45%),
+      linear-gradient(160deg, var(--color-primary) 0%, var(--color-secondary) 55%, #0f1626 100%);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+    color:var(--text-primary);
+  }
+
+  .card{
+    width:100%;
+    max-width:440px;
+    background:var(--color-surface);
+    border-radius:28px;
+    box-shadow:0 30px 70px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.25);
+    padding:0 28px 32px;
+    text-align:center;
+    position:relative;
+    animation:cardIn .6s cubic-bezier(.2,.8,.2,1);
+  }
+
+  @keyframes cardIn{
+    from{ opacity:0; transform:translateY(18px) scale(.97); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  .badge{
+    width:96px;
+    height:96px;
+    margin:0 auto;
+    margin-top:-48px;
+    padding:8px;
+    border-radius:24px;
+    background:linear-gradient(145deg, var(--color-primary), var(--color-secondary));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 20px 40px rgba(26,26,46,0.35), 0 0 0 6px var(--color-surface);
+  }
+
+  .badge img{
+    width:100%;
+    height:100%;
+    display:block;
+    background:var(--color-surface);
+    border-radius:16px;
+    object-fit:cover;
+  }
+
+  .brand-name{
+    margin:18px 0 2px;
+    font-size:22px;
+    font-weight:800;
+    color:var(--color-primary);
+    letter-spacing:.2px;
+  }
+
+  .brand-sub{
+    margin:0 0 22px;
+    font-size:13px;
+    font-weight:400;
+    color:var(--text-hint);
+  }
+
+  .divider{
+    height:1px;
+    background:var(--border);
+    margin:0 0 24px;
+  }
+
+  .state-icon{
+    width:72px;
+    height:72px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:background-color .3s ease;
+  }
+
+  .state-icon svg{
+    width:34px;
+    height:34px;
+  }
+
+  .state-icon.success{ background:rgba(15,155,88,0.12); }
+  .state-icon.error{ background:rgba(231,76,60,0.12); }
+  .state-icon.neutral{ background:rgba(233,69,96,0.12); }
+  .state-icon.loading{ background:var(--color-surface-alt); }
+
+  .spinner{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:3px solid var(--border);
+    border-top-color:var(--color-accent);
+    animation:spin .8s linear infinite;
+  }
+
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .state-title{
+    font-size:19px;
+    font-weight:700;
+    margin:0 0 10px;
+    line-height:1.5;
+  }
+
+  .state-title.success{ color:var(--color-success); }
+  .state-title.error{ color:var(--color-danger); }
+  .state-title.neutral{ color:var(--color-primary); }
+
+  .state-message{
+    font-size:15px;
+    font-weight:400;
+    color:var(--text-secondary);
+    line-height:1.9;
+    margin:0 0 6px;
+  }
+
+  .state-hint{
+    font-size:13px;
+    font-weight:400;
+    color:var(--text-hint);
+    line-height:1.8;
+    margin:14px 0 0;
+    padding-top:14px;
+    border-top:1px dashed var(--border);
+  }
+
+  footer{
+    text-align:center;
+    margin-top:22px;
+    font-size:12px;
+    color:rgba(255,255,255,0.45);
+    font-weight:400;
+  }
+
+  @media (max-width:380px){
+    .card{ padding:0 20px 26px; border-radius:22px; }
+    .brand-name{ font-size:20px; }
+    .state-title{ font-size:17px; }
+    .state-message{ font-size:14px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="badge" aria-hidden="true">
+      <!-- App emblem (official raster logo, resized 200x200 / re-encoded JPEG q80) -->
+      <img src="data:image/jpeg;base64,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" alt="">
+    </div>
+
+    
+    <h1 class="brand-name">نظام الدليل</h1>
+    <p class="brand-sub">لإدارة الأنشطة التجارية</p>
+
+    <div class="divider"></div>
+
+    <!-- ── Loading state (shown briefly while JS parses the hash) ── -->
+    <div id="state-loading">
+      <div class="state-icon loading"><div class="spinner"></div></div>
+      <h2 class="state-title neutral">جارِ التحقق من الرابط...</h2>
+      <p class="state-message">برجاء الانتظار للحظات.</p>
+    </div>
+
+    <!-- ── Success state ── -->
+    <div id="state-success" style="display:none;">
+      <div class="state-icon success">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 13l4 4L19 7" stroke="#0F9B58" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 class="state-title success">تم تأكيد حسابك بنجاح ✅</h2>
+      <p class="state-message">ارجع لتطبيق الدليل على جهازك وسجّل دخولك للمتابعة.</p>
+      <p class="state-hint">يمكنك الآن إغلاق هذه الصفحة بأمان.</p>
+    </div>
+
+    <!-- ── Error state ── -->
+    <div id="state-error" style="display:none;">
+      <div class="state-icon error">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 6l12 12M18 6L6 18" stroke="#E74C3C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 class="state-title error">الرابط منتهي الصلاحية أو غير صالح</h2>
+      <p class="state-message" id="error-message">برجاء إعادة إرسال رابط التأكيد من داخل التطبيق.</p>
+      <p class="state-hint">افتح تطبيق الدليل ← اطلب إعادة إرسال رابط تأكيد البريد الإلكتروني.</p>
+    </div>
+
+    <!-- ── Neutral / no-params fallback state ── -->
+    <div id="state-neutral" style="display:none;">
+      <div class="state-icon neutral">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 9v4M12 16.5h.01" stroke="#E94560" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="9" stroke="#E94560" stroke-width="2"/>
+        </svg>
+      </div>
+      <h2 class="state-title neutral">هذه صفحة تأكيد البريد الإلكتروني</h2>
+      <p class="state-message">لم يتم العثور على بيانات تأكيد في هذا الرابط.</p>
+      <p class="state-hint">إذا كنت تحاول تأكيد بريدك الإلكتروني، افتح الرابط المُرسل إليك مباشرة من البريد، أو أعد إرساله من داخل تطبيق الدليل.</p>
+    </div>
+
+  </div>
+
+  <footer>El-Daleel POS &middot; نظام الدليل لإدارة الأنشطة التجارية</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  function showState(id) {
+    ['state-loading', 'state-success', 'state-error', 'state-neutral'].forEach(function (sectionId) {
+      var el = document.getElementById(sectionId);
+      if (el) el.style.display = (sectionId === id) ? '' : 'none';
+    });
+  }
+
+  function parseParams() {
+    // Supabase redirects put the auth result in the URL hash fragment
+    // (e.g. #access_token=...&type=signup) on success, or
+    // (e.g. #error=...&error_description=...) on failure.
+    var raw = window.location.hash && window.location.hash.length > 1
+      ? window.location.hash.substring(1)
+      : '';
+
+    var params = new URLSearchParams(raw);
+
+    // Fallback: some Supabase configurations (PKCE / older flows) can land
+    // the same information in the query string instead of the hash.
+    if (!raw && window.location.search && window.location.search.length > 1) {
+      params = new URLSearchParams(window.location.search.substring(1));
+    }
+
+    return params;
+  }
+
+  function resolveErrorMessage(params) {
+    var description = params.get('error_description');
+    if (description) {
+      return description.replace(/\+/g, ' ');
+    }
+    return 'الرابط منتهي الصلاحية أو غير صالح، برجاء إعادة إرسال رابط التأكيد من داخل التطبيق.';
+  }
+
+  function init() {
+    var params = parseParams();
+
+    var hasError = !!(params.get('error') || params.get('error_description'));
+    var type = params.get('type');
+    var hasAccessToken = !!params.get('access_token');
+
+    if (hasError) {
+      var msgEl = document.getElementById('error-message');
+      if (msgEl) msgEl.textContent = resolveErrorMessage(params);
+      showState('state-error');
+      return;
+    }
+
+    if (type === 'signup' || (hasAccessToken && !type)) {
+      showState('state-success');
+      return;
+    }
+
+    if (hasAccessToken && (type === 'recovery' || type === 'invite' || type === 'magiclink' || type === 'email_change')) {
+      showState('state-success');
+      return;
+    }
+
+    showState('state-neutral');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</body>
+</html>
