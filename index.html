@@ -264,23 +264,21 @@
   // silent: this page's own success/failure UI never depends on it, since
   // the account is already usable regardless (tenant-claim-owner minted a
   // working session at sign-up time, independent of this).
-  function confirmOwnerEmail(accessToken) {
-    try {
-      fetch(CONFIRM_BASE_URL + '/functions/v1/owner-confirm-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': CONFIRM_ANON_KEY
-        },
-        body: JSON.stringify({ access_token: accessToken })
-      }).catch(function () {
-        // Swallowed on purpose — see comment above. Nothing in the UI
-        // changes either way.
-      });
-    } catch (e) {
-      // Also swallowed — e.g. `fetch` unavailable in some ancient browser.
-    }
+function confirmOwnerEmail(accessToken) {
+  try {
+    return fetch(CONFIRM_BASE_URL + '/functions/v1/owner-confirm-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': CONFIRM_ANON_KEY,
+        'Authorization': 'Bearer ' + CONFIRM_ANON_KEY
+      },
+      body: JSON.stringify({ access_token: accessToken })
+    });
+  } catch (e) {
+    return Promise.reject(e);
   }
+}
 
   function showState(id) {
     ['state-loading', 'state-success', 'state-error', 'state-neutral'].forEach(function (sectionId) {
@@ -330,13 +328,16 @@
       return;
     }
 
-    if (type === 'signup') {
-      // A genuine confirmation-link click — the ONLY case that should
-      // flip tenant_owner.email_confirmed.
-      confirmOwnerEmail(params.get('access_token'));
-      showState('state-success');
-      return;
-    }
+if (type === 'signup') {
+  confirmOwnerEmail(params.get('access_token'))
+    .then(function (res) {
+      showState(res && res.ok ? 'state-success' : 'state-error');
+    })
+    .catch(function () {
+      showState('state-error');
+    });
+  return;
+}
 
     if (hasAccessToken && !type) {
       showState('state-success');
