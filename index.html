@@ -178,6 +178,73 @@
     font-weight:400;
   }
 
+  .btn-primary{
+    font-family:inherit;
+    font-size:15px;
+    font-weight:700;
+    color:#FFFFFF;
+    background:var(--color-primary);
+    border:none;
+    border-radius:12px;
+    padding:12px 34px;
+    cursor:pointer;
+    margin-top:14px;
+  }
+
+  .btn-primary:active{ transform:scale(.98); }
+  .btn-primary:disabled{ opacity:.6; cursor:default; transform:none; }
+
+  /* ── Password-reset form (recovery link) ── */
+  .reset-form{
+    margin:18px 0 0;
+    text-align:start;
+  }
+
+  .field{
+    display:block;
+    margin:0 0 14px;
+  }
+
+  .field span{
+    display:block;
+    margin:0 0 6px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text-secondary);
+  }
+
+  .field input{
+    width:100%;
+    font-family:inherit;
+    font-size:16px;
+    color:var(--text-primary);
+    background:var(--color-surface-alt);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px 14px;
+    direction:ltr;
+    text-align:start;
+    outline:none;
+  }
+
+  .field input:focus{
+    border-color:var(--color-primary);
+    background:var(--color-surface);
+  }
+
+  .field-error{
+    margin:0 0 12px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--color-danger);
+    line-height:1.7;
+  }
+
+  .reset-form .btn-primary{
+    width:100%;
+    margin-top:4px;
+  }
+
   @media (max-width:380px){
     .card{ padding:0 20px 26px; border-radius:22px; }
     .brand-name{ font-size:20px; }
@@ -219,6 +286,56 @@
       <p class="state-hint">يمكنك الآن إغلاق هذه الصفحة بأمان.</p>
     </div>
 
+    <!-- ── Password-reset form: shown for a genuine recovery link ── -->
+    <div id="state-reset" style="display:none;">
+      <div class="state-icon neutral">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="5" y="11" width="14" height="9" rx="2" stroke="#E94560" stroke-width="2"/>
+          <path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#E94560" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h2 class="state-title neutral">تعيين كلمة سر جديدة</h2>
+      <p class="state-message">اكتب كلمة السر الجديدة لحسابك في نظام الدليل.</p>
+      <form id="reset-form" class="reset-form" novalidate>
+        <label class="field">
+          <span>كلمة السر الجديدة</span>
+          <input id="new-password" type="password" autocomplete="new-password" required>
+        </label>
+        <label class="field">
+          <span>تأكيد كلمة السر</span>
+          <input id="confirm-password" type="password" autocomplete="new-password" required>
+        </label>
+        <p id="reset-error" class="field-error" role="alert" style="display:none;"></p>
+        <button id="reset-submit-btn" class="btn-primary" type="submit">حفظ كلمة السر</button>
+      </form>
+    </div>
+
+    <!-- ── Password-reset success state ── -->
+    <div id="state-reset-done" style="display:none;">
+      <div class="state-icon success">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 13l4 4L19 7" stroke="#0F9B58" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 class="state-title success">تم تغيير كلمة السر ✅</h2>
+      <p class="state-message">ارجع لتطبيق الدليل وسجّل دخولك بكلمة السر الجديدة.</p>
+      <p class="state-hint">يمكنك الآن إغلاق هذه الصفحة بأمان.</p>
+    </div>
+
+    <!-- ── Pending-failure state: link itself valid, backend update NOT confirmed ── -->
+    <div id="state-pending-failure" style="display:none;">
+      <div class="state-icon error">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 9v4M12 16.5h.01" stroke="#E74C3C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="9" stroke="#E74C3C" stroke-width="2"/>
+        </svg>
+      </div>
+      <h2 class="state-title error">تم التحقق من رابطك، لكن حدث خطأ في إتمام العملية</h2>
+      <p class="state-message">لم نتمكن من تأكيد اكتمال العملية في النظام. لا حاجة لرابط جديد — اضغط إعادة المحاولة.</p>
+      <p><button id="retry-confirm-btn" class="btn-primary" type="button">إعادة المحاولة</button></p>
+      <p class="state-hint">إذا تكرر الخطأ، افتح تطبيق الدليل واطلب إعادة إرسال رابط التأكيد.</p>
+    </div>
+
     <!-- ── Error state ── -->
     <div id="state-error" style="display:none;">
       <div class="state-icon error">
@@ -228,7 +345,7 @@
       </div>
       <h2 class="state-title error">الرابط منتهي الصلاحية أو غير صالح</h2>
       <p class="state-message" id="error-message">برجاء إعادة إرسال رابط التأكيد من داخل التطبيق.</p>
-      <p class="state-hint">افتح تطبيق الدليل ← اطلب إعادة إرسال رابط تأكيد البريد الإلكتروني.</p>
+      <p class="state-hint" id="error-hint">افتح تطبيق الدليل ← اطلب إعادة إرسال رابط تأكيد البريد الإلكتروني.</p>
     </div>
 
     <!-- ── Neutral / no-params fallback state ── -->
@@ -258,30 +375,206 @@
   var CONFIRM_BASE_URL = 'https://zsifthqgcuyjoybekarg.supabase.co';
   var CONFIRM_ANON_KEY = 'sb_publishable_s8xB5WGzmuemeZvrv_hPvg_RhmiCqna';
 
+  // Bound on the backend call (ms) so a hung request lands in the
+  // pending-failure state instead of spinning forever.
+  var FETCH_TIMEOUT_MS = 9000;
+
+  // Remembers the token across retries — a retry costs nothing and needs
+  // no new email, since the access_token is already in hand from the URL.
+  var pendingAccessToken = null;
+
   // Tells the backend a REAL confirmation link was just clicked (this page
   // is only ever reached that way) — flips tenant_owner.email_confirmed,
-  // the flag owner-password-reset-gate actually checks. Best-effort and
-  // silent: this page's own success/failure UI never depends on it, since
-  // the account is already usable regardless (tenant-claim-owner minted a
-  // working session at sign-up time, independent of this).
-function confirmOwnerEmail(accessToken) {
-  try {
-    return fetch(CONFIRM_BASE_URL + '/functions/v1/owner-confirm-email', {
+  // the flag owner-password-reset-gate actually checks. Unlike the old
+  // fire-and-forget version, the outcome is REPORTED: onBackendResult(true)
+  // only after a 2xx response whose body confirms success;
+  // onBackendResult(false) on timeout, network failure, non-2xx, or an
+  // error body. Parsing the link successfully is NOT treated as proof the
+  // backend was updated — the UI waits for this callback before choosing
+  // between the success and pending-failure states.
+  function confirmOwnerEmail(accessToken, onBackendResult) {
+    var settled = false;
+    function done(ok) {
+      if (settled) return;
+      settled = true;
+      onBackendResult(ok);
+    }
+
+    var fetchOptions = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'apikey': CONFIRM_ANON_KEY,
-        'Authorization': 'Bearer ' + CONFIRM_ANON_KEY
+        'apikey': CONFIRM_ANON_KEY
       },
       body: JSON.stringify({ access_token: accessToken })
-    });
-  } catch (e) {
-    return Promise.reject(e);
+    };
+
+    try {
+      if (typeof AbortController !== 'undefined') {
+        var controller = new AbortController();
+        fetchOptions.signal = controller.signal;
+        setTimeout(function () {
+          try { controller.abort(); } catch (e) {}
+          // Timeout lands in pending-failure, never success.
+          done(false);
+        }, FETCH_TIMEOUT_MS);
+      } else {
+        // Ancient browser without AbortController: still bound the spinner
+        // with a plain timer; any late arrival afterwards is ignored via
+        // `settled`.
+        setTimeout(function () { done(false); }, FETCH_TIMEOUT_MS);
+      }
+
+      fetch(CONFIRM_BASE_URL + '/functions/v1/owner-confirm-email', fetchOptions)
+        .then(function (res) {
+          if (!res || !res.ok) { done(false); return null; }
+          return res.json().catch(function () { return null; });
+        })
+        .then(function (body) {
+          done(!!(body && body.success === true));
+        })
+        .catch(function () { done(false); });
+    } catch (e) {
+      // Synchronous throw (e.g. `fetch` unavailable) — also failure.
+      done(false);
+    }
   }
-}
+
+  // ── Password reset (recovery link) ─────────────────────────────────────
+  // Supabase's recovery email lands here with #access_token=...&type=recovery.
+  // That token is a real, short-lived session for the owner, so the new
+  // password is set with GoTrue's own PUT /auth/v1/user — no custom backend
+  // and nothing is stored: the token lives only in this page's memory.
+
+  // Same floor as the app's sign-up screen (gm_auth_screen.dart) and
+  // GoTrue's default minimum.
+  var MIN_PASSWORD_LENGTH = 6;
+  var RESET_TIMEOUT_MS = 15000;
+
+  var RESET_MESSAGES = {
+    tooShort: 'كلمة السر يجب ألا تقل عن ' + MIN_PASSWORD_LENGTH + ' أحرف.',
+    mismatch: 'كلمتا السر غير متطابقتين.',
+    samePassword: 'كلمة السر الجديدة يجب أن تختلف عن كلمة السر الحالية.',
+    weak: 'كلمة السر ضعيفة — جرّب كلمة أطول أو أصعب.',
+    network: 'تعذّر الاتصال بالخادم. تحقق من الإنترنت وحاول مرة أخرى.',
+    generic: 'حدث خطأ أثناء حفظ كلمة السر. حاول مرة أخرى.'
+  };
+
+  var recoveryAccessToken = null;
+
+  // Asks GoTrue to change the password of the user the token belongs to.
+  // Calls onResult({ ok: true }) or onResult({ ok: false, reason }) where
+  // reason is 'expired' (link no longer valid) or a RESET_MESSAGES key.
+  function updatePassword(accessToken, password, onResult) {
+    var settled = false;
+    function done(result) {
+      if (settled) return;
+      settled = true;
+      onResult(result);
+    }
+
+    var options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': CONFIRM_ANON_KEY,
+        'Authorization': 'Bearer ' + accessToken
+      },
+      body: JSON.stringify({ password: password })
+    };
+
+    try {
+      if (typeof AbortController !== 'undefined') {
+        var controller = new AbortController();
+        options.signal = controller.signal;
+        setTimeout(function () {
+          try { controller.abort(); } catch (e) {}
+          done({ ok: false, reason: 'network' });
+        }, RESET_TIMEOUT_MS);
+      }
+
+      fetch(CONFIRM_BASE_URL + '/auth/v1/user', options)
+        .then(function (res) {
+          if (res.ok) { done({ ok: true }); return null; }
+          return res.json().catch(function () { return {}; }).then(function (body) {
+            done({ ok: false, reason: classifyResetFailure(res.status, body || {}) });
+          });
+        })
+        .catch(function () { done({ ok: false, reason: 'network' }); });
+    } catch (e) {
+      done({ ok: false, reason: 'network' });
+    }
+  }
+
+  // Maps GoTrue's own machine-readable error_code (not its free text) to a
+  // reason this page knows how to show.
+  function classifyResetFailure(status, body) {
+    var code = body.error_code || body.code;
+    if (code === 'same_password') return 'samePassword';
+    if (code === 'weak_password') return 'weak';
+    if (status === 401 || status === 403 ||
+        code === 'bad_jwt' || code === 'session_expired' || code === 'session_not_found') {
+      return 'expired';
+    }
+    return 'generic';
+  }
+
+  function validateNewPassword(password, confirmation) {
+    if (password.length < MIN_PASSWORD_LENGTH) return 'tooShort';
+    if (password !== confirmation) return 'mismatch';
+    return null;
+  }
+
+  function showResetError(reason) {
+    var el = document.getElementById('reset-error');
+    if (!el) return;
+    el.textContent = RESET_MESSAGES[reason] || RESET_MESSAGES.generic;
+    el.style.display = '';
+  }
+
+  function clearResetError() {
+    var el = document.getElementById('reset-error');
+    if (el) el.style.display = 'none';
+  }
+
+  // The shared error state is worded for confirmation links; a dead reset
+  // link needs its own wording (and a different next step).
+  function showExpiredResetLink() {
+    var message = document.getElementById('error-message');
+    var hint = document.getElementById('error-hint');
+    if (message) message.textContent = 'انتهت صلاحية رابط إعادة التعيين أو سبق استخدامه.';
+    if (hint) hint.textContent = 'افتح تطبيق الدليل ← «نسيت كلمة السر» واطلب رابطًا جديدًا.';
+    showState('state-error');
+  }
+
+  function handleResetSubmit(event) {
+    event.preventDefault();
+    if (!recoveryAccessToken) { showExpiredResetLink(); return; }
+
+    var password = document.getElementById('new-password').value;
+    var confirmation = document.getElementById('confirm-password').value;
+    var invalid = validateNewPassword(password, confirmation);
+    if (invalid) { showResetError(invalid); return; }
+
+    clearResetError();
+    var button = document.getElementById('reset-submit-btn');
+    button.disabled = true;
+
+    updatePassword(recoveryAccessToken, password, function (result) {
+      button.disabled = false;
+      if (result.ok) {
+        recoveryAccessToken = null;
+        showState('state-reset-done');
+      } else if (result.reason === 'expired') {
+        showExpiredResetLink();
+      } else {
+        showResetError(result.reason);
+      }
+    });
+  }
 
   function showState(id) {
-    ['state-loading', 'state-success', 'state-error', 'state-neutral'].forEach(function (sectionId) {
+    ['state-loading', 'state-success', 'state-error', 'state-neutral', 'state-pending-failure', 'state-reset', 'state-reset-done'].forEach(function (sectionId) {
       var el = document.getElementById(sectionId);
       if (el) el.style.display = (sectionId === id) ? '' : 'none';
     });
@@ -328,28 +621,68 @@ function confirmOwnerEmail(accessToken) {
       return;
     }
 
-if (type === 'signup') {
-  confirmOwnerEmail(params.get('access_token'))
-    .then(function (res) {
-      showState(res && res.ok ? 'state-success' : 'state-error');
-    })
-    .catch(function () {
-      showState('state-error');
-    });
-  return;
-}
+    if (type === 'signup') {
+      // A genuine confirmation-link click — the ONLY case that should
+      // flip tenant_owner.email_confirmed. The fetch RESULT (not the
+      // parsed link) decides which state renders: loading while in flight,
+      // success only on a confirmed body, pending-failure otherwise. The
+      // token is kept for free retries.
+      var token = params.get('access_token');
+      if (!token) {
+        // A tokenless signup link proves nothing and the backend call
+        // cannot run without a token — treat as invalid, exactly like the
+        // other unusable-link branches (previously this wrongly showed
+        // success).
+        showState('state-error');
+        return;
+      }
+      pendingAccessToken = token;
+      showState('state-loading');
+      confirmOwnerEmail(token, function (ok) {
+        showState(ok ? 'state-success' : 'state-pending-failure');
+      });
+      return;
+    }
+
+    if (type === 'recovery' && hasAccessToken) {
+      // A genuine password-recovery link: let the owner choose a new
+      // password here. (It used to fall into the generic "success" branch
+      // below, which told the owner the account was confirmed and never let
+      // them change anything.)
+      recoveryAccessToken = params.get('access_token');
+      showState('state-reset');
+      return;
+    }
 
     if (hasAccessToken && !type) {
       showState('state-success');
       return;
     }
 
-    if (hasAccessToken && (type === 'recovery' || type === 'invite' || type === 'magiclink' || type === 'email_change')) {
+    if (hasAccessToken && (type === 'invite' || type === 'magiclink' || type === 'email_change')) {
       showState('state-success');
       return;
     }
 
     showState('state-neutral');
+  }
+
+  // Retry button (pending-failure state only): re-attempts the same fetch
+  // with the already-held token — no new email, no re-parse.
+  var retryBtn = document.getElementById('retry-confirm-btn');
+  if (retryBtn) {
+    retryBtn.addEventListener('click', function () {
+      if (!pendingAccessToken) { showState('state-error'); return; }
+      showState('state-loading');
+      confirmOwnerEmail(pendingAccessToken, function (ok) {
+        showState(ok ? 'state-success' : 'state-pending-failure');
+      });
+    });
+  }
+
+  var resetForm = document.getElementById('reset-form');
+  if (resetForm) {
+    resetForm.addEventListener('submit', handleResetSubmit);
   }
 
   if (document.readyState === 'loading') {
